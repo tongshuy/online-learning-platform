@@ -35,7 +35,7 @@ let resourceIndexCache = null;
 async function readResourceIndex() {
   if (resourceIndexCache) return resourceIndexCache;
   try {
-    const raw = await fs.readFile(path.join(root, "data", "resourceIndex.json"), "utf8");
+    const raw = await fs.readFile(path.join(root, "data", "rag", "resourceIndex.json"), "utf8");
     resourceIndexCache = JSON.parse(raw);
   } catch {
     resourceIndexCache = {};
@@ -74,7 +74,7 @@ async function callDeepSeek(messages, temperature = 0.55) {
       status: 503,
       body: {
         error: "本地服务端还没有配置 DEEPSEEK_API_KEY。",
-        setup: "请根据 .env.local.example 创建 .env.local，并在重启服务后再使用 AI 交流区。",
+        setup: "请根据 .env.example 创建 .env.local，并在重启服务后再使用 AI 交流区。",
       },
     };
   }

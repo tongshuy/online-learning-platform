@@ -74,11 +74,12 @@ The feedback report includes learning strengths, major difficulties, profile cha
 
 ```text
 .
-├── app.js
 ├── index.html
-├── styles.css
 ├── package.json
 ├── netlify.toml
+├── src/
+│   ├── app.js
+│   └── styles.css
 ├── scripts/
 │   └── serve.mjs
 ├── netlify/
@@ -89,11 +90,30 @@ The feedback report includes learning strengths, major difficulties, profile cha
 │       └── lib/
 │           └── deepseek-common.js
 ├── data/
-│   ├── resourceIndex.json
-│   └── resourceIndex.example.json
-├── 教学资源/
-└── 测试图片/
+│   ├── knowledge/
+│   │   └── knowledge-base.md
+│   ├── mappings/
+│   │   ├── knowledge-level-mapping.csv
+│   │   └── knowledge-trigger-priority.csv
+│   ├── rag/
+│   │   ├── resourceIndex.json
+│   │   └── resourceIndex.example.json
+│   └── scenarios/
+│       └── scenarios.json
+├── docs/
+│   └── product/
+│       ├── product-overview.md
+│       └── feature-requirements.md
+├── resources/
+│   └── teaching/
+│       ├── lesson-materials/
+│       ├── examples/
+│       └── references/
+└── public/
+    └── images/
 ```
+
+`data/` stores structured data used by the platform, such as RAG indexes, knowledge mappings, and scenario JSON. `resources/` stores source learning materials for users, such as PPT/PDF course materials, examples, and references.
 
 ## Local Development
 
@@ -126,7 +146,7 @@ PORT=5176 node scripts/serve.mjs
 
 The frontend does not expose the DeepSeek API key. AI requests are sent through a backend proxy, either the local Node server or Netlify Functions.
 
-For local development, create a `.env.local` file based on `.env.local.example`:
+For local development, create a `.env.local` file based on `.env.example`:
 
 ```text
 DEEPSEEK_API_KEY=your_deepseek_api_key

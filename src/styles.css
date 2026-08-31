@@ -448,7 +448,7 @@ h3 {
   padding: clamp(28px, 6vw, 72px);
   background:
     linear-gradient(90deg, rgba(255, 253, 247, 0.96) 0%, rgba(255, 250, 234, 0.78) 48%, rgba(255, 247, 223, 0.36) 100%),
-    url("测试图片/学习情境适应需求识别页面.png") center right / min(62%, 760px) no-repeat;
+    url("/public/images/学习情境适应需求识别页面.png") center right / min(62%, 760px) no-repeat;
   box-shadow: var(--shadow);
 }
 
@@ -1177,7 +1177,7 @@ h3 {
   padding: clamp(24px, 4vw, 46px);
   background:
     linear-gradient(110deg, rgba(255, 253, 247, 0.92) 0%, rgba(255, 249, 232, 0.84) 54%, rgba(226, 238, 223, 0.75) 100%),
-    url("测试图片/学习情境适应需求识别页面.png") center right / min(58%, 620px) no-repeat;
+    url("/public/images/学习情境适应需求识别页面.png") center right / min(58%, 620px) no-repeat;
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
 }
@@ -2048,7 +2048,7 @@ h3 {
   .hero-band {
     background:
       linear-gradient(180deg, rgba(255, 253, 247, 0.95), rgba(255, 249, 232, 0.9)),
-      url("测试图片/学习情境适应需求识别页面.png") center bottom / 88% no-repeat;
+      url("/public/images/学习情境适应需求识别页面.png") center bottom / 88% no-repeat;
     padding-bottom: 260px;
   }
 
@@ -2056,7 +2056,7 @@ h3 {
     min-height: 620px;
     background:
       linear-gradient(180deg, rgba(255, 253, 247, 0.95), rgba(255, 249, 232, 0.78)),
-      url("测试图片/学习情境适应需求识别页面.png") center bottom / 92% no-repeat;
+      url("/public/images/学习情境适应需求识别页面.png") center bottom / 92% no-repeat;
     padding-bottom: 300px;
   }
 

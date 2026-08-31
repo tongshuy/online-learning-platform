@@ -70,7 +70,7 @@ async function readResourceIndex(event) {
   if (resourceIndexCache) return resourceIndexCache;
 
   try {
-    const raw = await fs.readFile(path.join(process.cwd(), "data", "resourceIndex.json"), "utf8");
+    const raw = await fs.readFile(path.join(process.cwd(), "data", "rag", "resourceIndex.json"), "utf8");
     resourceIndexCache = JSON.parse(raw);
     return resourceIndexCache;
   } catch {
@@ -81,7 +81,7 @@ async function readResourceIndex(event) {
     }
 
     try {
-      const response = await fetch(`https://${host}/data/resourceIndex.json`);
+      const response = await fetch(`https://${host}/data/rag/resourceIndex.json`);
       resourceIndexCache = response.ok ? await response.json() : {};
     } catch {
       resourceIndexCache = {};

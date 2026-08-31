@@ -14,40 +14,40 @@ const courseCatalog = [
 
 const resourceMap = {
   "1": [
-    { type: "PDF", file: "教学资源/第1章-在线教育实践发展的脉络与创新方向.pdf", label: "第1章-在线教育实践发展的脉络与创新方向.pdf" },
-    { type: "PDF", file: "教学资源/第一章-教材.pdf", label: "第一章-教材.pdf" },
+    { type: "PDF", file: "resources/teaching/lesson-materials/第1章-在线教育实践发展的脉络与创新方向.pdf", label: "第1章-在线教育实践发展的脉络与创新方向.pdf" },
+    { type: "PDF", file: "resources/teaching/references/第一章-教材.pdf", label: "第一章-教材.pdf" },
   ],
   "2": [
-    { type: "PDF", file: "教学资源/第2章-在线教学模式与教学设计.pdf", label: "第2章-在线教学模式与教学设计.pdf" },
-    { type: "PDF", file: "教学资源/第二章-教材.pdf", label: "第二章-教材.pdf" },
-    { type: "PDF", file: "教学资源/第二章-阅读材料.pdf", label: "第二章-阅读材料.pdf" },
+    { type: "PDF", file: "resources/teaching/lesson-materials/第2章-在线教学模式与教学设计.pdf", label: "第2章-在线教学模式与教学设计.pdf" },
+    { type: "PDF", file: "resources/teaching/references/第二章-教材.pdf", label: "第二章-教材.pdf" },
+    { type: "PDF", file: "resources/teaching/references/第二章-阅读材料.pdf", label: "第二章-阅读材料.pdf" },
   ],
   "3": [
-    { type: "PDF", file: "教学资源/第3章-在线自主学习与学习支持服务.pdf", label: "第3章-在线自主学习与学习支持服务.pdf" },
-    { type: "PDF", file: "教学资源/第三章-教材.pdf", label: "第三章-教材.pdf" },
-    { type: "PDF", file: "教学资源/第三章-阅读材料.pdf", label: "第三章-阅读材料.pdf" },
+    { type: "PDF", file: "resources/teaching/lesson-materials/第3章-在线自主学习与学习支持服务.pdf", label: "第3章-在线自主学习与学习支持服务.pdf" },
+    { type: "PDF", file: "resources/teaching/references/第三章-教材.pdf", label: "第三章-教材.pdf" },
+    { type: "PDF", file: "resources/teaching/references/第三章-阅读材料.pdf", label: "第三章-阅读材料.pdf" },
   ],
   "4": [
-    { type: "PDF", file: "教学资源/第4章-在线学习资源与建设模式.pdf", label: "第4章-在线学习资源与建设模式.pdf" },
-    { type: "PDF", file: "教学资源/第四章-教材.pdf", label: "第四章-教材.pdf" },
-    { type: "PDF", file: "教学资源/第四章-阅读材料.pdf", label: "第四章-阅读材料.pdf" },
+    { type: "PDF", file: "resources/teaching/lesson-materials/第4章-在线学习资源与建设模式.pdf", label: "第4章-在线学习资源与建设模式.pdf" },
+    { type: "PDF", file: "resources/teaching/references/第四章-教材.pdf", label: "第四章-教材.pdf" },
+    { type: "PDF", file: "resources/teaching/references/第四章-阅读材料.pdf", label: "第四章-阅读材料.pdf" },
   ],
   "5": [
-    { type: "PDF", file: "教学资源/第5章-在线教育的过程监控与精准管理.pdf", label: "第5章-在线教育的过程监控与精准管理.pdf" },
-    { type: "PDF", file: "教学资源/第五章-教材.pdf", label: "第五章-教材.pdf" },
-    { type: "PDF", file: "教学资源/第五章-阅读材料.pdf", label: "第五章-阅读材料.pdf" },
+    { type: "PDF", file: "resources/teaching/lesson-materials/第5章-在线教育的过程监控与精准管理.pdf", label: "第5章-在线教育的过程监控与精准管理.pdf" },
+    { type: "PDF", file: "resources/teaching/references/第五章-教材.pdf", label: "第五章-教材.pdf" },
+    { type: "PDF", file: "resources/teaching/references/第五章-阅读材料.pdf", label: "第五章-阅读材料.pdf" },
   ],
   "6": [
-    { type: "PDF", file: "教学资源/第6章-在线教育服务供给模式.pdf", label: "第6章-在线教育服务供给模式.pdf" },
-    { type: "PDF", file: "教学资源/第六章-教材.pdf", label: "第六章-教材.pdf" },
+    { type: "PDF", file: "resources/teaching/lesson-materials/第6章-在线教育服务供给模式.pdf", label: "第6章-在线教育服务供给模式.pdf" },
+    { type: "PDF", file: "resources/teaching/references/第六章-教材.pdf", label: "第六章-教材.pdf" },
   ],
   "7": [
-    { type: "PDF", file: "教学资源/第7章-在线教育公共服务平台与典型案例.pdf", label: "第7章-在线教育公共服务平台与典型案例.pdf" },
-    { type: "PDF", file: "教学资源/第七章-教材.pdf", label: "第七章-教材.pdf" },
+    { type: "PDF", file: "resources/teaching/lesson-materials/第7章-在线教育公共服务平台与典型案例.pdf", label: "第7章-在线教育公共服务平台与典型案例.pdf" },
+    { type: "PDF", file: "resources/teaching/references/第七章-教材.pdf", label: "第七章-教材.pdf" },
   ],
   "8": [
-    { type: "PDF", file: "教学资源/第8章-在线教育的新知识观和新本体论.pdf", label: "第8章-在线教育的新知识观和新本体论.pdf" },
-    { type: "PDF", file: "教学资源/第八章-教材.pdf", label: "第八章-教材.pdf" },
+    { type: "PDF", file: "resources/teaching/lesson-materials/第8章-在线教育的新知识观和新本体论.pdf", label: "第8章-在线教育的新知识观和新本体论.pdf" },
+    { type: "PDF", file: "resources/teaching/references/第八章-教材.pdf", label: "第八章-教材.pdf" },
   ],
 };
 
@@ -95,7 +95,7 @@ const questions = [
     id: "motivation",
     title: "学习动机触发因素识别",
     question: "请判断下面说法与你的学习状态有多符合。",
-    image: "测试图片/学习动机触发因素识别页面.png",
+    image: "public/images/学习动机触发因素识别页面.png",
     dimension: "学习动机触发因素",
     items: [
       { id: "motivation-task", text: "当学习任务和成绩、要求相关时，我更容易开始学习。", agent: "planner" },
@@ -108,7 +108,7 @@ const questions = [
     id: "situation",
     title: "学习情境适应需求识别",
     question: "请判断下面说法与你的学习支持需求有多符合。",
-    image: "测试图片/学习情境适应需求识别页面.png",
+    image: "public/images/学习情境适应需求识别页面.png",
     dimension: "学习情境适应需求",
     items: [
       { id: "situation-concept", text: "学习新概念时，我希望先看到清晰解释。", agent: "concept" },
@@ -121,7 +121,7 @@ const questions = [
     id: "selfRegulation",
     title: "自我调节与情绪管理识别",
     question: "请判断下面说法与你的自我调节状态有多符合。",
-    image: "测试图片/自我调节与情绪管理识别功能.png",
+    image: "public/images/自我调节与情绪管理识别功能.png",
     dimension: "自我调节与情绪管理",
     items: [
       { id: "selfRegulation-deadline", text: "面对两周完成的任务，我容易拖到截止前才开始。", agent: "planner" },
@@ -134,7 +134,7 @@ const questions = [
     id: "difficulty",
     title: "学习困难感知识别",
     question: "请判断下面困难在你的网络学习中有多明显。",
-    image: "测试图片/学习困难感知识别功能.png",
+    image: "public/images/学习困难感知识别功能.png",
     dimension: "学习困难感知",
     items: [
       { id: "difficulty-abstract", text: "我经常觉得课程概念比较抽象。", agent: "concept" },
@@ -147,7 +147,7 @@ const questions = [
     id: "cognition",
     title: "认知加工方式识别",
     question: "请判断下面方式对你确认理解有多重要。",
-    image: "测试图片/认知加工方式识别功能.png",
+    image: "public/images/认知加工方式识别功能.png",
     dimension: "认知加工方式",
     items: [
       { id: "cognition-define", text: "我更习惯通过复述定义来确认自己理解了知识点。", agent: "concept" },
@@ -285,7 +285,7 @@ function save() {
 
 async function fetchKnowledgeBase() {
   try {
-    const response = await fetch("知识库.txt");
+    const response = await fetch("data/knowledge/knowledge-base.md");
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     state.knowledgeBaseText = await response.text();
     if (state.activeTool === "tasks" && qs("#task-companion-dialog")?.open) {
@@ -1239,7 +1239,7 @@ function renderTaskKnowledgeReview(section, scenario) {
   const hasEvidence = cards.some((card) => card.evidence);
   return `
     <section class="knowledge-review">
-      ${!state.knowledgeBaseText ? `<div class="auto-cue"><strong>资料读取中</strong><p>正在读取“知识库.txt”。如果稍后仍未出现复习内容，说明本地资料未能被浏览器读取。</p></div>` : ""}
+      ${!state.knowledgeBaseText ? `<div class="auto-cue"><strong>资料读取中</strong><p>正在读取“data/knowledge/knowledge-base.md”。如果稍后仍未出现复习内容，说明本地资料未能被浏览器读取。</p></div>` : ""}
       ${!hasEvidence ? `<div class="auto-cue"><strong>资料不足提示</strong><p>当前知识库没有找到与该任务知识点足够匹配的解释片段。需要补充更明确的知识点说明后，才能生成可靠复习内容。</p></div>` : ""}
       <div class="review-card-grid">
         ${cards.map(renderKnowledgeReviewCard).join("")}
@@ -1273,7 +1273,7 @@ function renderKnowledgeReviewCard(card) {
       <div class="review-module"><strong>具体例子</strong><p>${escapeHtml(card.example)}</p></div>
       <div class="review-module"><strong>易错点提醒</strong><p>${escapeHtml(card.mistake)}</p></div>
       <div class="review-module"><strong>学习小结</strong><p>${escapeHtml(card.summary)}</p></div>
-      ${card.evidence ? `<small>依据：知识库.txt 匹配片段</small>` : `<small>需要补充：该知识点的解释或案例材料</small>`}
+      ${card.evidence ? `<small>依据：data/knowledge/knowledge-base.md 匹配片段</small>` : `<small>需要补充：该知识点的解释或案例材料</small>`}
     </article>
   `;
 }
@@ -1640,7 +1640,7 @@ function renderTestIntro() {
         </div>
       </div>
       <div class="question-visual">
-        <img src="测试图片/学习动机触发因素识别页面.png" alt="AI学伴匹配测试插图">
+        <img src="public/images/学习动机触发因素识别页面.png" alt="AI学伴匹配测试插图">
       </div>
     </div>
   `;
