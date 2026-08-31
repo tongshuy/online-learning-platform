@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "start:5176": "PORT=5176 node scripts/serve.mjs"
+  }
+}

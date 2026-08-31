@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>知伴学境-在线学习平台</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <span class="brand-mark">N</span>
+          <div>
+            <strong>知伴学境</strong>
+            <span>在线学习平台</span>
+          </div>
+        </div>
+        <nav class="nav" aria-label="主导航">
+          <button class="nav-item active" data-view="dashboard">总览</button>
+          <button class="nav-item" data-view="diagnosis">识别差异</button>
+          <button class="nav-item" data-view="agents">匹配支持</button>
+          <button class="nav-item" data-view="tasks">任务表现</button>
+          <button class="nav-item" data-view="resources">视频与文件</button>
+          <button class="nav-item" data-view="community">讨论区</button>
+          <button class="nav-item" data-view="ai">AI 交流区</button>
+          <button class="nav-item" data-view="analytics">过程追踪</button>
+        </nav>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">知伴学境 · 在线学习平台</p>
+            <h1 id="view-title">总览</h1>
+          </div>
+          <div class="top-actions">
+            <button class="ghost-btn" id="open-test-top">开始匹配测试</button>
+            <button class="primary-btn" data-jump="ai">询问 AI 伙伴</button>
+          </div>
+        </header>
+
+        <section class="view active" id="dashboard-view"></section>
+        <section class="view" id="diagnosis-view"></section>
+        <section class="view" id="agents-view"></section>
+        <section class="view" id="tasks-view"></section>
+        <section class="view" id="resources-view"></section>
+        <section class="view" id="community-view"></section>
+        <section class="view" id="ai-view"></section>
+        <section class="view" id="analytics-view"></section>
+      </main>
+    </div>
+
+    <dialog id="test-dialog" class="test-dialog">
+      <div class="test-panel">
+        <button class="icon-btn dialog-close" id="close-test" aria-label="关闭">×</button>
+        <div id="test-content"></div>
+      </div>
+    </dialog>
+
+    <dialog id="login-dialog" class="test-dialog">
+      <div class="test-panel dialog-narrow">
+        <button class="icon-btn dialog-close" id="close-login" aria-label="关闭">×</button>
+        <div id="login-content"></div>
+      </div>
+    </dialog>
+
+    <dialog id="profile-dialog" class="test-dialog">
+      <div class="test-panel dialog-medium">
+        <button class="icon-btn dialog-close" id="close-profile" aria-label="关闭">×</button>
+        <div id="profile-content"></div>
+      </div>
+    </dialog>
+
+    <dialog id="task-companion-dialog" class="test-dialog">
+      <div class="test-panel task-companion-panel">
+        <button class="icon-btn dialog-close" id="close-task-companion" aria-label="关闭">×</button>
+        <div id="task-companion-content"></div>
+      </div>
+    </dialog>
+
+    <dialog id="weekly-report-dialog" class="test-dialog">
+      <div class="test-panel dialog-medium">
+        <button class="icon-btn dialog-close" id="close-weekly-report" aria-label="关闭">×</button>
+        <div id="weekly-report-content"></div>
+      </div>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>

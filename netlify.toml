@@ -1,0 +1,21 @@
+[build]
+  publish = "."
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/deepseek"
+  to = "/.netlify/functions/deepseek"
+  status = 200
+
+[[redirects]]
+  from = "/api/agent-chat"
+  to = "/.netlify/functions/agent-chat"
+  status = 200
+
+[[redirects]]
+  from = "/api/section-chat"
+  to = "/.netlify/functions/section-chat"
+  status = 200
