@@ -1,53 +1,178 @@
-# 知伴学境-在线学习平台
+# 知伴学境 - 在线学习平台
 
-这是一个本地可运行的课程学习平台原型，围绕《在线教育原理》的学习者差异识别、AI 伙伴匹配、真实情境任务、资源上传、讨论协作和过程追踪设计。
+**知伴学境** is an AI-supported online learning platform prototype designed for the course **Online Education Principles**. The platform combines learner profiling, adaptive AI companions, chapter-based learning resources, scenario tasks, collaborative discussion, and learning analytics to support personalized online learning.
 
-## 运行
+## Live Demo
 
-```bash
-node scripts/serve.mjs
+Netlify deployment:
+
+[https://zhibanxuejing-online-learning.netlify.app/](https://zhibanxuejing-online-learning.netlify.app/)
+
+## Project Highlights
+
+- Learner profiling based on a five-dimensional diagnostic test.
+- Adaptive matching with four AI learning companions.
+- Chapter-based course navigation with PPT/PDF learning resources.
+- RAG-style chapter Q&A based on course resource excerpts.
+- Scenario-based learning tasks that emphasize knowledge transfer.
+- Collaborative task workspace with shared writing, contribution tracking, and group discussion.
+- AI-supported discussion and an AI teacher intervention prototype.
+- Biweekly feedback update flow for learner profile adjustment and learning support rematching.
+- Serverless deployment with Netlify Functions for secure AI API proxying.
+
+## Core Features
+
+### 1. Learner Diagnosis
+
+The platform starts with an initial learner diagnostic activity. Learners answer Likert-scale questions across five dimensions, and the system generates a visual learner profile to support personalized learning companion matching.
+
+### 2. AI Learning Companions
+
+The platform includes four role-specific AI companions:
+
+- **Concept Understanding Companion**: explains concepts with examples, misconceptions, and summaries.
+- **Task Planning Companion**: helps learners break down tasks, manage progress, and prepare submissions.
+- **Scenario Application Companion**: supports knowledge transfer from abstract concepts to real-world educational scenarios.
+- **Collaborative Discussion Companion**: helps learners organize ideas before participating in discussion.
+
+The AI companions are designed as learning scaffolds rather than answer generators. Learners are encouraged to think first, write initial ideas, and then request AI support.
+
+### 3. Chapter-Based Learning Resources
+
+Course materials are organized by chapter. Each chapter can include PPT files, textbook readings, extended reading materials, and discussion topics. The selected resource is previewed in the main workspace.
+
+### 4. RAG-Style Knowledge Q&A
+
+Each chapter has a dedicated knowledge Q&A area. The AI response is constrained by the selected chapter and the corresponding resource index. If the available course materials are insufficient, the system is designed to state that limitation instead of fabricating content.
+
+### 5. Task Performance and Collaboration
+
+The task module includes scenario tasks, planning support, collaborative writing, learner role division, contribution indicators, group discussion, and AI teacher prompts. It demonstrates how AI can be embedded into task-based and collaborative online learning.
+
+### 6. Feedback Update
+
+The platform models a two-week learning feedback cycle:
+
+```text
+Data collection -> Learner profile update -> AI support rematching -> Learner confirmation
 ```
 
-默认地址：
+The feedback report includes learning strengths, major difficulties, profile changes, AI support adjustment, and next-step recommendations.
+
+## Tech Stack
+
+- **Frontend**: HTML, CSS, vanilla JavaScript
+- **Local backend**: Node.js native HTTP server
+- **AI integration**: DeepSeek Chat Completions API
+- **Serverless backend**: Netlify Functions
+- **Deployment**: Netlify
+- **Data format**: JSON
+- **Client-side persistence**: localStorage
+- **Testing and debugging**: Node syntax checks, curl-based API verification
+
+## Project Structure
+
+```text
+.
+├── app.js
+├── index.html
+├── styles.css
+├── package.json
+├── netlify.toml
+├── scripts/
+│   └── serve.mjs
+├── netlify/
+│   └── functions/
+│       ├── agent-chat.js
+│       ├── deepseek.js
+│       ├── section-chat.js
+│       └── lib/
+│           └── deepseek-common.js
+├── data/
+│   ├── resourceIndex.json
+│   └── resourceIndex.example.json
+├── 教学资源/
+└── 测试图片/
+```
+
+## Local Development
+
+Clone the repository:
+
+```bash
+git clone https://github.com/tongshuy/online-learning-platform.git
+cd online-learning-platform
+```
+
+Start the local server:
+
+```bash
+npm run start
+```
+
+The default local address is:
 
 ```text
 http://localhost:5174
 ```
 
-如果浏览器里曾经在 5174 端口打开过其他本地项目，建议换一个干净端口：
+To use a different port:
 
 ```bash
 PORT=5176 node scripts/serve.mjs
 ```
 
-在终端手动打开本项目的推荐命令：
+## AI Configuration
 
-```bash
-cd "/Users/yangtongshu/Documents/codex Files/0601"
-npm run start:5176
-```
+The frontend does not expose the DeepSeek API key. AI requests are sent through a backend proxy, either the local Node server or Netlify Functions.
 
-## DeepSeek 接入
-
-AI 交流区通过本地服务端代理调用 DeepSeek，前端不会暴露 API key。
-
-创建 `.env.local`，内容参考 `.env.local.example`：
+For local development, create a `.env.local` file based on `.env.local.example`:
 
 ```text
-DEEPSEEK_API_KEY=你的 DeepSeek API key
+DEEPSEEK_API_KEY=your_deepseek_api_key
 DEEPSEEK_MODEL=deepseek-chat
 ```
 
-改完后重启服务。
+Restart the local server after updating environment variables.
 
-## 已实现模块
+For Netlify deployment, configure the same variables in:
 
-- 课程目录：左侧只保留章标题，点击章标题后显示该章内容。
-- 教学资源：按 `教学资源/` 文件名中的“第几章”自动归入对应章节；每章资源同时作为本章 RAG 语料库。
-- 本章知识问答 AI：每章右侧都有独立 AI，只基于该章资源内容回答知识点问题。
-- 章节讨论：每章提供一个讨论题，学习者可发帖，并可看到示例同学帖子。
-- 注册登录与个人中心：左上角头像入口显示学习进度、识别差异结果和当前匹配智能体。
-- 识别差异：五题单页测试，图片与维度一一对应，测试完成后生成学习画像。
-- 匹配支持：概念解释、任务规划、情境应用、讨论陪伴四类智能体；约束提示词在后端注入，页面不展示。
-- 任务表现：记录章节任务草稿、概念复述、知识迁移、证据使用和互动表现。
-- 动态识别：依据知识理解、任务过程、社会互动和能力发展四类数据生成阶段诊断与支持调整建议；当前为本地行为数据驱动的模拟诊断，不是纯固定数值。
+```text
+Netlify Site configuration -> Environment variables
+```
+
+Required variables:
+
+```text
+DEEPSEEK_API_KEY
+DEEPSEEK_MODEL
+```
+
+## Deployment
+
+This project can be deployed as a static site with Netlify Functions.
+
+The `netlify.toml` file maps frontend API routes to serverless functions:
+
+```text
+/api/deepseek      -> /.netlify/functions/deepseek
+/api/agent-chat   -> /.netlify/functions/agent-chat
+/api/section-chat -> /.netlify/functions/section-chat
+```
+
+Before deploying, make sure the DeepSeek API key is configured as a Netlify environment variable.
+
+## Security Notes
+
+- Do not commit `.env.local`.
+- Do not expose API keys in frontend JavaScript.
+- Use server-side or serverless API routes to call external AI APIs.
+- Rotate API keys if they are accidentally exposed.
+
+## Status
+
+This project is a functional prototype. Some learning analytics, collaboration data, and adaptive support logic are implemented as prototype-level interactions using localStorage and simulated behavioral data. The architecture leaves room for future integration with a real database, authentication system, vector database, or learning analytics backend.
+
+## Author
+
+Yang Tongshu
