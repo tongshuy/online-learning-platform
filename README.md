@@ -1,74 +1,230 @@
-# 知伴学境 - 在线学习平台
+# 知伴学境
 
-**知伴学境** is an AI-supported online learning platform prototype designed for the course **Online Education Principles**. The platform combines learner profiling, adaptive AI companions, chapter-based learning resources, scenario tasks, collaborative discussion, and learning analytics to support personalized online learning.
+### AI-Supported Online Learning Platform
+
+**知伴学境** is an AI-supported online learning platform that provides personalized learning support based on each learner's current needs.
+
+The platform builds an initial learner profile, matches the learner with an appropriate AI companion, supports course learning and scenario-based tasks, tracks learning behavior and task performance, and continuously updates future support.
+
 
 ## Live Demo
 
-Netlify deployment:
+**Netlify:**  
+https://zhibanxuejing-online-learning.netlify.app/
+<img width="3008" height="1548" alt="image" src="https://github.com/user-attachments/assets/8806a25d-028d-4d47-9d36-39406ee0fc9b" />
+<img width="1670" height="1460" alt="image" src="https://github.com/user-attachments/assets/fa3be824-e29a-4590-b0a6-602f113c8168" />
 
-[https://zhibanxuejing-online-learning.netlify.app/](https://zhibanxuejing-online-learning.netlify.app/)
 
-## Project Highlights
 
-- Learner profiling based on a five-dimensional diagnostic test.
-- Adaptive matching with four AI learning companions.
-- Chapter-based course navigation with PPT/PDF learning resources.
-- RAG-style chapter Q&A based on course resource excerpts.
-- Scenario-based learning tasks that emphasize knowledge transfer.
-- Collaborative task workspace with shared writing, contribution tracking, and group discussion.
-- AI-supported discussion and an AI teacher intervention prototype.
-- Biweekly feedback update flow for learner profile adjustment and learning support rematching.
-- Serverless deployment with Netlify Functions for secure AI API proxying.
+## Overview
 
-## Core Features
+Online learners may face different difficulties during the same course:
 
-### 1. Learner Diagnosis
+- difficulty understanding abstract concepts;
+- difficulty starting or managing complex tasks;
+- difficulty applying knowledge to real-world problems;
+- difficulty organizing ideas and participating in discussion.
 
-The platform starts with an initial learner diagnostic activity. Learners answer Likert-scale questions across five dimensions, and the system generates a visual learner profile to support personalized learning companion matching.
+知伴学境 uses learner profiling, AI companion matching, scenario-based learning, collaboration, and continuous feedback to provide targeted support throughout the learning process.
 
-### 2. AI Learning Companions
+The core product loop is:
 
-The platform includes four role-specific AI companions:
+```text
+Understand
+   ↓
+Match
+   ↓
+Support
+   ↓
+Observe
+   ↓
+Adapt
+   ↺
+```
 
-- **Concept Understanding Companion**: explains concepts with examples, misconceptions, and summaries.
-- **Task Planning Companion**: helps learners break down tasks, manage progress, and prepare submissions.
-- **Scenario Application Companion**: supports knowledge transfer from abstract concepts to real-world educational scenarios.
-- **Collaborative Discussion Companion**: helps learners organize ideas before participating in discussion.
+## How It Works
 
-The AI companions are designed as learning scaffolds rather than answer generators. Learners are encouraged to think first, write initial ideas, and then request AI support.
+```mermaid
+flowchart TD
+    A[Learner enters course] --> B[Learner diagnosis]
+    B --> C[Initial learner profile]
+    C --> D[AI companion matching]
+    D --> E[Course learning & scenario tasks]
+    E --> F[Adaptive AI support]
+    F --> G[Behavior & performance tracking]
+    G --> H[Learner profile update]
+    H --> I[Support adjustment]
+    I --> E
+```
 
-### 3. Chapter-Based Learning Resources
+The learner profile changes with the learner's progress and current support needs.
 
-Course materials are organized by chapter. Each chapter can include PPT files, textbook readings, extended reading materials, and discussion topics. The selected resource is previewed in the main workspace.
+## Key Features
+
+### 1. Learner Profiling
+
+Learners complete a lightweight diagnostic activity before beginning the course.
+
+The platform builds an initial profile across five dimensions:
+
+- learning motivation triggers;
+- learning support preferences;
+- self-regulation and emotional management;
+- perceived learning difficulties;
+- cognitive processing preferences.
+
+The learner can review the result, understand the recommendation, and adjust the profile if needed.
+
+### 2. Adaptive AI Learning Companions
+
+The platform includes four AI learning companions:
+
+| AI Companion | Primary Support |
+| --- | --- |
+| **Concept Understanding Companion** | Concept explanation, examples, misconceptions, knowledge structure |
+| **Task Planning Companion** | Task decomposition, progress planning, reminders |
+| **Scenario Application Companion** | Case analysis, knowledge transfer, role-based problem solving |
+| **Collaborative Discussion Companion** | Idea organization, discussion preparation, reflective questioning |
+
+The system uses a **primary companion + auxiliary support** model.
+
+Learners can receive support from different companions as their needs change across learning activities.
+
+### 3. Chapter-Based Learning Environment
+
+Course content is organized by chapter and integrated into one learning workspace.
+
+Learning resources may include:
+
+- PPT/PDF materials;
+- textbook readings;
+- extended resources;
+- chapter discussions;
+- knowledge Q&A.
+
+AI support is embedded into relevant learning activities and pages.
 
 ### 4. RAG-Style Knowledge Q&A
 
 Each chapter has a dedicated knowledge Q&A area. The AI response is constrained by the selected chapter and the corresponding resource index. If the available course materials are insufficient, the system is designed to state that limitation instead of fabricating content.
 
-### 5. Task Performance and Collaboration
+### 5. Scenario-Based Learning
 
-The task module includes scenario tasks, planning support, collaborative writing, learner role division, contribution indicators, group discussion, and AI teacher prompts. It demonstrates how AI can be embedded into task-based and collaborative online learning.
+Learners apply course knowledge to real-world educational problems.
 
-### 6. Feedback Update
+Example scenarios include:
 
-The platform models a two-week learning feedback cycle:
+- designing a digital training program for county-level teachers;
+- redesigning a low-completion MOOC into a MOOC + SPOC model;
+- designing emergency online learning during school closures;
+- improving a rural dual-teacher classroom model.
+
+Scenario tasks require learners to analyze problems, apply course concepts, consider multiple stakeholder perspectives, and design practical solutions.
+
+AI provides prompts, examples, planning support, and reflection scaffolds during the task process.
+
+### 6. Collaborative Task Workspace
+
+Scenario tasks can be completed collaboratively.
+
+The prototype includes:
+
+- group discussion;
+- shared task writing;
+- role-based problem analysis;
+- contribution indicators;
+- peer interaction;
+- AI-supported discussion;
+- AI teacher intervention prototypes.
+
+The collaboration design supports explanation, evidence use, negotiation, and collaborative problem solving.
+
+### 7. Continuous Feedback and Adaptive Support
+
+The platform tracks learning process data such as:
+
+- resource usage;
+- quiz performance;
+- task initiation and progress;
+- task revisions;
+- discussion participation;
+- collaboration behavior;
+- AI interaction.
+
+These signals update the learner profile and future support strategy.
 
 ```text
-Data collection -> Learner profile update -> AI support rematching -> Learner confirmation
+Learning data
+    ↓
+Profile update
+    ↓
+Support adjustment
+    ↓
+Learner confirmation
+    ↓
+Next learning cycle
 ```
 
-The feedback report includes learning strengths, major difficulties, profile changes, AI support adjustment, and next-step recommendations.
+## Product Principles
+
+### Learner First
+
+Learners complete the core thinking, judgment, expression, and task decisions.
+
+AI provides explanation, prompts, questions, planning support, examples, organization support, and feedback.
+
+### Dynamic Learner Profile
+
+The learner profile represents the learner's current state and support needs.
+
+It can change with new learning behavior, task performance, collaboration, and learner feedback.
+
+### Explainable Support
+
+The platform explains:
+
+- what support is recommended;
+- why it is recommended;
+- what learning evidence contributed to the recommendation.
+
+### Contextual AI Support
+
+Different learning activities trigger different support:
+
+```text
+Concept learning
+→ Concept support
+
+Task preparation
+→ Planning support
+
+Real-world problem solving
+→ Scenario application support
+
+Discussion
+→ Collaborative discussion support
+```
+
+### Learner Control
+
+Learners can:
+
+- review profile results;
+- adjust or retake the diagnostic;
+- accept or postpone support;
+- request more or less AI assistance.
 
 ## Tech Stack
 
-- **Frontend**: HTML, CSS, vanilla JavaScript
-- **Local backend**: Node.js native HTTP server
-- **AI integration**: DeepSeek Chat Completions API
-- **Serverless backend**: Netlify Functions
-- **Deployment**: Netlify
-- **Data format**: JSON
-- **Client-side persistence**: localStorage
-- **Testing and debugging**: Node syntax checks, curl-based API verification
+- **Frontend:** HTML, CSS, Vanilla JavaScript
+- **Local backend:** Node.js native HTTP server
+- **AI model:** DeepSeek Chat Completions API
+- **Serverless backend:** Netlify Functions
+- **Deployment:** Netlify
+- **Structured data:** JSON, CSV
+- **Client-side persistence:** localStorage
+- **Learning resources:** PPT, PDF
+- **Documentation:** Markdown
 
 ## Project Structure
 
@@ -77,11 +233,14 @@ The feedback report includes learning strengths, major difficulties, profile cha
 ├── index.html
 ├── package.json
 ├── netlify.toml
+│
 ├── src/
 │   ├── app.js
 │   └── styles.css
+│
 ├── scripts/
 │   └── serve.mjs
+│
 ├── netlify/
 │   └── functions/
 │       ├── agent-chat.js
@@ -89,6 +248,7 @@ The feedback report includes learning strengths, major difficulties, profile cha
 │       ├── section-chat.js
 │       └── lib/
 │           └── deepseek-common.js
+│
 ├── data/
 │   ├── knowledge/
 │   │   └── knowledge-base.md
@@ -100,20 +260,35 @@ The feedback report includes learning strengths, major difficulties, profile cha
 │   │   └── resourceIndex.example.json
 │   └── scenarios/
 │       └── scenarios.json
+│
 ├── docs/
 │   └── product/
 │       ├── product-overview.md
 │       └── feature-requirements.md
+│
 ├── resources/
 │   └── teaching/
 │       ├── lesson-materials/
 │       ├── examples/
 │       └── references/
+│
 └── public/
     └── images/
 ```
 
-`data/` stores structured data used by the platform, such as RAG indexes, knowledge mappings, and scenario JSON. `resources/` stores source learning materials for users, such as PPT/PDF course materials, examples, and references.
+### Directory Responsibilities
+
+- `src/` — frontend application code
+- `netlify/functions/` — serverless AI API endpoints
+- `data/` — structured data used by the application and AI generation pipeline
+- `resources/` — source course materials and learning assets
+- `docs/` — product and feature documentation
+- `public/` — static frontend assets
+
+## Product Documentation
+
+- [Product Overview](docs/product/product-overview.md)
+- [Feature Requirements](docs/product/feature-requirements.md)
 
 ## Local Development
 
@@ -124,13 +299,19 @@ git clone https://github.com/tongshuy/online-learning-platform.git
 cd online-learning-platform
 ```
 
+Install dependencies:
+
+```bash
+npm install
+```
+
 Start the local server:
 
 ```bash
 npm run start
 ```
 
-The default local address is:
+Default local address:
 
 ```text
 http://localhost:5174
@@ -144,9 +325,9 @@ PORT=5176 node scripts/serve.mjs
 
 ## AI Configuration
 
-The frontend does not expose the DeepSeek API key. AI requests are sent through a backend proxy, either the local Node server or Netlify Functions.
+AI requests are routed through the local backend or Netlify Functions so the API key stays on the server side.
 
-For local development, create a `.env.local` file based on `.env.example`:
+Create a local environment file based on `.env.example`:
 
 ```text
 DEEPSEEK_API_KEY=your_deepseek_api_key
@@ -158,7 +339,8 @@ Restart the local server after updating environment variables.
 For Netlify deployment, configure the same variables in:
 
 ```text
-Netlify Site configuration -> Environment variables
+Netlify Site configuration
+→ Environment variables
 ```
 
 Required variables:
@@ -170,29 +352,45 @@ DEEPSEEK_MODEL
 
 ## Deployment
 
-This project can be deployed as a static site with Netlify Functions.
+The project is deployed as a static frontend with Netlify Functions.
 
-The `netlify.toml` file maps frontend API routes to serverless functions:
+API routes are mapped through `netlify.toml`:
 
 ```text
-/api/deepseek      -> /.netlify/functions/deepseek
-/api/agent-chat   -> /.netlify/functions/agent-chat
-/api/section-chat -> /.netlify/functions/section-chat
+/api/deepseek
+→ /.netlify/functions/deepseek
+
+/api/agent-chat
+→ /.netlify/functions/agent-chat
+
+/api/section-chat
+→ /.netlify/functions/section-chat
 ```
 
-Before deploying, make sure the DeepSeek API key is configured as a Netlify environment variable.
+## Security
 
-## Security Notes
+- Never commit `.env.local`.
+- Never expose API keys in frontend JavaScript.
+- Route external AI requests through server-side or serverless functions.
+- Rotate any key that may have been exposed.
 
-- Do not commit `.env.local`.
-- Do not expose API keys in frontend JavaScript.
-- Use server-side or serverless API routes to call external AI APIs.
-- Rotate API keys if they are accidentally exposed.
+## Current Status
 
-## Status
+This project is a **functional product prototype**.
 
-This project is a functional prototype. Some learning analytics, collaboration data, and adaptive support logic are implemented as prototype-level interactions using localStorage and simulated behavioral data. The architecture leaves room for future integration with a real database, authentication system, vector database, or learning analytics backend.
+The current version demonstrates the complete flow from learner diagnosis and AI companion matching to scenario-based learning, collaborative tasks, and feedback-driven profile updates.
+
+Some analytics and collaboration behaviors are currently simulated or stored through `localStorage`.
+
+Future development may include:
+
+- persistent user authentication;
+- database-backed learner profiles;
+- production collaboration infrastructure;
+- semantic/vector retrieval for course resources;
+- more robust learning analytics;
+- teacher-facing analytics dashboards.
 
 ## Author
 
-Yang Tongshu
+**Yang Tongshu**
