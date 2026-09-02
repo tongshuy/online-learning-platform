@@ -239,6 +239,7 @@ const state = {
   user: JSON.parse(localStorage.getItem("learningUser") || "null"),
   matchedAgent: localStorage.getItem("matchedAgent") || "concept",
   agentMessages: JSON.parse(localStorage.getItem("agentMessages") || "[]"),
+  coordinatorDecisions: JSON.parse(localStorage.getItem("coordinatorDecisions") || "[]"),
   sectionMessages: JSON.parse(localStorage.getItem("sectionMessages") || "{}"),
   discussionPosts: JSON.parse(localStorage.getItem("discussionPosts") || "{}"),
   selectedResources: JSON.parse(localStorage.getItem("selectedResources") || "{}"),
@@ -262,6 +263,43 @@ function currentSection() {
   return allSections().find((item) => item.id === state.selectedSection) || allSections()[0];
 }
 
+function currentScenario() {
+  return taskScenarios[state.selectedScenario] || taskScenarios[0];
+}
+
+function coordinatorLearningContext(section = currentSection()) {
+  const scenario = currentScenario();
+  const selectedResource = resourceMap[section.id]?.[selectedResourceIndex(section)];
+  const p = profile();
+  return {
+    matchedAgent: state.matchedAgent,
+    matchedAgentName: agentInfo[state.matchedAgent]?.name || "待匹配",
+    profile: {
+      mainAgent: p.mainAgent,
+      supportScores: p.scores,
+      traits: p.traits,
+      radarValues: profileRadarValues(),
+    },
+    currentSection: {
+      id: section.id,
+      title: section.title,
+      discussion: section.discussion,
+      selectedResource: selectedResource?.label || null,
+    },
+    currentTask: {
+      title: scenario.title,
+      subtitle: scenario.subtitle,
+      knowledge: scenario.knowledge,
+      questions: scenario.questions,
+      roles: scenario.roles,
+    },
+    activeTool: state.activeTool,
+    twoWeekCycle: twoWeekCycleLabel(section),
+    progressPercent: progressPercent(),
+    telemetry: chapterTelemetry(section.id),
+  };
+}
+
 function save() {
   localStorage.setItem("selectedSection", state.selectedSection);
   localStorage.setItem("selectedScenario", String(state.selectedScenario));
@@ -269,6 +307,7 @@ function save() {
   localStorage.setItem("learningUser", JSON.stringify(state.user));
   localStorage.setItem("matchedAgent", state.matchedAgent);
   localStorage.setItem("agentMessages", JSON.stringify(state.agentMessages.slice(-24)));
+  localStorage.setItem("coordinatorDecisions", JSON.stringify(state.coordinatorDecisions.slice(-12)));
   localStorage.setItem("sectionMessages", JSON.stringify(state.sectionMessages));
   localStorage.setItem("discussionPosts", JSON.stringify(state.discussionPosts));
   localStorage.setItem("selectedResources", JSON.stringify(state.selectedResources));
@@ -767,6 +806,17 @@ function renderMatchedAgentPanel() {
         <div class="record-item"><strong>后续动态调整</strong><p>系统每两周汇总一次学习行为、任务表现、社会互动和 AI 互动数据，并更新学习者画像与 AI 学伴支持策略。</p></div>
       </div>
     </section>
+    <section class="panel-lite coordinator-panel">
+      <div>
+        <p class="eyebrow">Coordinator Agent</p>
+        <h3>AI 学伴协调器</h3>
+        <p class="muted">每次提问时，协调器会综合学习者画像、当前章节、任务情境和行为数据，先选择 1 个主学伴，必要时附加 1 个辅助学伴，再由主学伴生成最终回复。</p>
+      </div>
+      <div class="coordinator-flow">
+        ${["学习者状态", "协调器判断", "主学伴回复", "展示判断理由"].map((item) => `<span>${item}</span>`).join("")}
+      </div>
+      ${renderLatestCoordinatorDecision()}
+    </section>
     <section class="panel-lite companion-map">
       <h3>四类AI学伴如何嵌入学习过程</h3>
       <div class="companion-map-grid">
@@ -802,6 +852,29 @@ function renderMatchedAgentPanel() {
       <textarea id="agent-chat-input" placeholder="向匹配AI学伴描述你的学习困难、任务卡点或讨论准备需求。"></textarea>
       <button class="primary-btn" type="submit">发送</button>
     </form>
+  `;
+}
+
+function renderLatestCoordinatorDecision() {
+  const decision = state.coordinatorDecisions[state.coordinatorDecisions.length - 1];
+  if (!decision) {
+    return `<p class="muted">还没有新的协调器判断。发送一个问题后，这里会显示本轮为什么分配给某个 AI 学伴。</p>`;
+  }
+  return renderCoordinatorDecision(decision);
+}
+
+function renderCoordinatorDecision(decision) {
+  const main = agentInfo[decision.selectedAgent]?.name || decision.selectedAgent || "待判断";
+  const secondary = decision.secondaryAgent ? agentInfo[decision.secondaryAgent]?.name || decision.secondaryAgent : "无";
+  return `
+    <div class="coordinator-decision">
+      <div class="chip-row">
+        ${chip(`主学伴：${main}`, "mint")}
+        ${chip(`辅助学伴：${secondary}`, "blue")}
+      </div>
+      <p><strong>判断理由：</strong>${escapeHtml(decision.reason || "系统根据当前学习状态完成分配。")}</p>
+      <p><strong>支持策略：</strong>${escapeHtml(decision.strategy || "先引导学习者表达已有想法，再给出提示。")}</p>
+    </div>
   `;
 }
 
@@ -864,7 +937,14 @@ function renderConceptTriggerCard(section) {
 
 function renderMessages(messages, emptyText) {
   if (!messages.length) return `<div class="chat-bubble assistant">${emptyText}</div>`;
-  return messages.map((item) => `<div class="chat-bubble ${item.role === "user" ? "user" : "assistant"}">${escapeHtml(item.content)}</div>`).join("");
+  return messages
+    .map(
+      (item) => `<div class="chat-bubble ${item.role === "user" ? "user" : "assistant"}">
+        ${item.coordinator ? renderCoordinatorDecision(item.coordinator) : ""}
+        ${escapeHtml(item.content)}
+      </div>`,
+    )
+    .join("");
 }
 
 function renderScenarioPartnerPanel(section, scenario) {
@@ -1736,17 +1816,28 @@ async function sendAgentMessage(message) {
   });
   renderApp();
   try {
-    const response = await fetch("/api/agent-chat", {
+    const response = await fetch("/api/coordinator-chat", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
-        agentKey: state.matchedAgent,
+        learningContext: coordinatorLearningContext(),
         messages: state.agentMessages.map((item) => ({ role: item.role, content: item.content })),
       }),
     });
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content || [data.error, data.setup].filter(Boolean).join("\n") || "AI 暂时没有返回内容。";
-    state.agentMessages.push({ role: "assistant", content });
+    if (data.coordinator) {
+      state.coordinatorDecisions.push({
+        ...data.coordinator,
+        time: nowText(),
+      });
+      updateTelemetry(state.selectedSection, {
+        coordinatorRoutedTo: data.coordinator.selectedAgent,
+        coordinatorSecondaryAgent: data.coordinator.secondaryAgent || "",
+        coordinatorReason: data.coordinator.reason || "",
+      });
+    }
+    state.agentMessages.push({ role: "assistant", content, coordinator: data.coordinator || null });
   } catch (error) {
     state.agentMessages.push({ role: "assistant", content: `调用失败：${error.message}` });
   }

@@ -1003,6 +1003,52 @@ h3 {
   margin-bottom: 14px;
 }
 
+.coordinator-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.coordinator-flow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.coordinator-flow span {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 10px;
+  background: #fffdf7;
+  text-align: center;
+  color: #554b36;
+  font-size: 13px;
+}
+
+.coordinator-flow span:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  right: -11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+}
+
+.coordinator-decision {
+  display: grid;
+  gap: 8px;
+  border: 1px solid rgba(101, 160, 136, 0.32);
+  border-radius: var(--radius);
+  padding: 10px;
+  background: #f4fbf4;
+}
+
+.coordinator-decision p {
+  margin: 0;
+  color: #4f584d;
+  line-height: 1.6;
+}
+
 .feedback-loop {
   margin-bottom: 16px;
 }
@@ -1971,8 +2017,13 @@ h3 {
   .contribution-item,
   .review-card-grid,
   .scenario-thinking-grid,
-  .loop-steps {
+  .loop-steps,
+  .coordinator-flow {
     grid-template-columns: 1fr;
+  }
+
+  .coordinator-flow span:not(:last-child)::after {
+    display: none;
   }
 
   .section-ai {

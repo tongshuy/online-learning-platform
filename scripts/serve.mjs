@@ -30,6 +30,35 @@ const agentPrompts = {
   discussion: `你是“共同讨论伙伴”。你的任务是帮助学习者进行讨论准备、观点整理、表达练习和互动反思。你不能直接替学习者发布讨论内容，不能代替学习者完成小组协作，也不能主导小组决策。你可以提供表达模板、观点整理建议、追问问题和共识总结。回答应温和、鼓励、低压力。`,
 };
 
+const agentNames = {
+  concept: "概念理解伙伴",
+  planner: "任务规划伙伴",
+  scenario: "情境应用伙伴",
+  discussion: "共同讨论伙伴",
+};
+
+const coordinatorPrompt = `你是“AI学伴协调器 Coordinator Agent”。你的任务不是直接回答学习问题，而是根据学习者画像、当前页面、当前章节、当前任务、学习行为数据和用户问题，判断本轮最适合由哪一类AI学伴提供支持。
+
+可选AI学伴只有四类：
+- concept：概念理解伙伴，适合概念、定义、知识结构、易错点。
+- planner：任务规划伙伴，适合任务拆解、学习进度、截止日期、下一步行动。
+- scenario：情境应用伙伴，适合真实案例、角色视角、知识迁移、方案合理性追问。
+- discussion：共同讨论伙伴，适合讨论发言、观点整理、回应同伴、降低表达压力。
+
+你必须输出严格JSON，不要输出Markdown，不要解释JSON之外的内容。格式如下：
+{
+  "selectedAgent": "concept|planner|scenario|discussion",
+  "secondaryAgent": "concept|planner|scenario|discussion|null",
+  "reason": "用一句中文说明为什么这样分配",
+  "strategy": "用一句中文说明主学伴应该怎样支持，强调先引导学习者思考而不是代写"
+}
+
+约束：
+- selectedAgent必须是四类之一。
+- secondaryAgent可以为null；只有确实需要补充视角时才选择。
+- secondaryAgent不能和selectedAgent相同。
+- 如果用户要求直接生成完整作业、完整方案或替他发帖，应选择最相关学伴，但strategy必须要求以追问、框架或检查清单支持，不直接代写。`;
+
 let resourceIndexCache = null;
 
 async function readResourceIndex() {
@@ -109,6 +138,68 @@ function writeDeepSeekResult(res, result) {
   sendJson(res, result.status, result.body);
 }
 
+function extractAssistantContent(result) {
+  if (!result.raw) return "";
+  try {
+    const data = JSON.parse(result.raw);
+    return data.choices?.[0]?.message?.content || "";
+  } catch {
+    return "";
+  }
+}
+
+function parseJsonObject(text) {
+  if (!text) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    const match = text.match(/\{[\s\S]*\}/);
+    if (!match) return null;
+    try {
+      return JSON.parse(match[0]);
+    } catch {
+      return null;
+    }
+  }
+}
+
+function normalizeCoordinatorDecision(input, fallbackAgent = "concept") {
+  const validAgents = Object.keys(agentPrompts);
+  const selectedAgent = validAgents.includes(input?.selectedAgent) ? input.selectedAgent : fallbackAgent;
+  const secondaryAgent =
+    validAgents.includes(input?.secondaryAgent) && input.secondaryAgent !== selectedAgent
+      ? input.secondaryAgent
+      : null;
+  return {
+    selectedAgent,
+    secondaryAgent,
+    reason: String(input?.reason || `系统根据当前问题先交由${agentNames[selectedAgent]}支持。`).slice(0, 140),
+    strategy: String(input?.strategy || "先理解学习者已有想法，再通过提示、追问和框架帮助其完善。").slice(0, 180),
+    source: input?.source || "coordinator",
+  };
+}
+
+function heuristicCoordinatorDecision(payload) {
+  const context = payload.learningContext || {};
+  const lastMessage = [...(payload.messages || [])].reverse().find((item) => item.role === "user")?.content || "";
+  const text = `${lastMessage}\n${context.activeTool || ""}\n${context.currentTask?.title || ""}`;
+  let selectedAgent = context.matchedAgent || "concept";
+  let secondaryAgent = null;
+  if (/概念|定义|含义|理论|区别|是什么|知识点|框架/.test(text)) selectedAgent = "concept";
+  if (/任务|计划|进度|截止|ddl|步骤|先做|还有多少|安排|提交/.test(text)) selectedAgent = "planner";
+  if (/案例|情境|场景|迁移|角色|方案|原因|策略|应用|双师|MOOC|SPOC|培训/.test(text)) selectedAgent = "scenario";
+  if (/讨论|发言|回复|观点|同伴|小组|表达|帖子|怎么说/.test(text)) selectedAgent = "discussion";
+  if (selectedAgent === "scenario" && /概念|定义|理论|知识点/.test(text)) secondaryAgent = "concept";
+  if (selectedAgent === "planner" && /讨论|发言|小组/.test(text)) secondaryAgent = "discussion";
+  return normalizeCoordinatorDecision({
+    selectedAgent,
+    secondaryAgent,
+    reason: `根据当前问题关键词和学习页面状态，优先交由${agentNames[selectedAgent]}支持。`,
+    strategy: "先确认学习者已有想法，再给出下一步提示或追问，避免直接替学习者完成最终答案。",
+    source: "heuristic",
+  }, selectedAgent);
+}
+
 async function proxyDeepSeek(req, res) {
   let payload;
   try {
@@ -119,6 +210,77 @@ async function proxyDeepSeek(req, res) {
   }
 
   writeDeepSeekResult(res, await callDeepSeek(payload.messages || []));
+}
+
+async function coordinatorChat(req, res) {
+  let payload;
+  try {
+    payload = JSON.parse(await readBody(req));
+  } catch {
+    sendJson(res, 400, { error: "Invalid JSON body." });
+    return;
+  }
+
+  const fallback = heuristicCoordinatorDecision(payload);
+  const coordinatorInput = {
+    learnerProfile: payload.learningContext?.profile || null,
+    matchedAgent: payload.learningContext?.matchedAgent || null,
+    currentSection: payload.learningContext?.currentSection || null,
+    activeTool: payload.learningContext?.activeTool || null,
+    currentTask: payload.learningContext?.currentTask || null,
+    telemetry: payload.learningContext?.telemetry || null,
+    recentMessages: (payload.messages || []).slice(-8),
+  };
+  const coordinatorResult = await callDeepSeek(
+    [
+      { role: "system", content: coordinatorPrompt },
+      { role: "user", content: JSON.stringify(coordinatorInput, null, 2) },
+    ],
+    0.1,
+  );
+  if (!coordinatorResult.raw && coordinatorResult.status >= 400) {
+    writeDeepSeekResult(res, coordinatorResult);
+    return;
+  }
+
+  const decision = normalizeCoordinatorDecision(
+    parseJsonObject(extractAssistantContent(coordinatorResult)) || fallback,
+    fallback.selectedAgent,
+  );
+  if (!decision.source) decision.source = parseJsonObject(extractAssistantContent(coordinatorResult)) ? "coordinator" : "heuristic";
+
+  const secondaryNote = decision.secondaryAgent
+    ? `本轮可参考辅助学伴“${agentNames[decision.secondaryAgent]}”的视角，但最终仍由你作为主学伴回答。`
+    : "本轮不需要额外辅助学伴。";
+  const system = `${agentPrompts[decision.selectedAgent]}
+
+本轮由AI学伴协调器分配给你。
+协调器判断理由：${decision.reason}
+支持策略：${decision.strategy}
+${secondaryNote}
+
+回答要求：不要重复展示协调器JSON；用自然、温和、面向学习者的中文回答。优先基于学习者已经表达的内容进行追问、提示、框架化建议或检查清单，不要直接替学习者完成完整作业。`;
+
+  const answerResult = await callDeepSeek(
+    [
+      { role: "system", content: system },
+      ...(payload.messages || []),
+    ],
+    0.55,
+  );
+  if (!answerResult.raw) {
+    sendJson(res, answerResult.status, { ...(answerResult.body || {}), coordinator: decision });
+    return;
+  }
+
+  try {
+    const data = JSON.parse(answerResult.raw);
+    data.coordinator = decision;
+    sendJson(res, answerResult.status, data);
+  } catch {
+    res.writeHead(answerResult.status, { "content-type": "application/json; charset=utf-8" });
+    res.end(answerResult.raw);
+  }
 }
 
 async function agentChat(req, res) {
@@ -185,6 +347,11 @@ const server = http.createServer(async (req, res) => {
 
   if (url.pathname === "/api/agent-chat" && req.method === "POST") {
     await agentChat(req, res);
+    return;
+  }
+
+  if (url.pathname === "/api/coordinator-chat" && req.method === "POST") {
+    await coordinatorChat(req, res);
     return;
   }
 
