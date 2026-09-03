@@ -59,6 +59,64 @@ flowchart TD
 
 The learner profile changes with the learner's progress and current support needs.
 
+### Coordinator Routing Layer
+
+AI companion selection is managed by a **Coordinator Agent** rather than relying only on a fixed initial match.
+
+For each learning request, the Coordinator considers the learner's current context, including:
+
+- learner profile;
+- current primary companion;
+- current chapter and learning content;
+- current task or scenario;
+- learning cycle and progress;
+- recent learning behavior;
+- recent conversation history;
+- the learner's current question.
+
+The Coordinator then determines:
+
+- the **primary AI companion** for the current request;
+- an optional **secondary companion**;
+- the reason for the routing decision;
+- the support strategy to be used.
+
+```mermaid
+flowchart LR
+    A[Learner request] --> B[Learning context]
+    B --> C[Coordinator Agent]
+    C --> D{Route request}
+
+    D --> E[Concept Understanding]
+    D --> F[Task Planning]
+    D --> G[Scenario Application]
+    D --> H[Collaborative Discussion]
+
+    C --> I[Primary companion]
+    C --> J[Optional auxiliary companion]
+
+    I --> K[Context-aware AI support]
+    J --> K
+
+    K --> L[Learning behavior & feedback]
+    L --> B
+```
+
+The Coordinator uses structured output to make routing decisions explainable and machine-readable:
+
+```json
+{
+  "selectedAgent": "concept|planner|scenario|discussion",
+  "secondaryAgent": "concept|planner|scenario|discussion|null",
+  "reason": "routing reason",
+  "strategy": "support strategy"
+}
+```
+
+A rule-based fallback is used when the Coordinator response cannot be parsed reliably.
+
+A fixed set of representative learning requests is also used to evaluate routing performance. In the current prototype, AI companion routing reached **89% accuracy**.
+
 ## Key Features
 
 ### 1. Learner Profiling
@@ -89,6 +147,8 @@ The platform includes four AI learning companions:
 The system uses a **primary companion + auxiliary support** model.
 
 Learners can receive support from different companions as their needs change across learning activities.
+
+During learning, the **Coordinator Agent** can dynamically route each request to the companion that best matches the learner's current need. This allows the system to move beyond a one-time initial match and provide context-aware support as learning situations change.
 
 ### 3. Chapter-Based Learning Environment
 
@@ -244,6 +304,7 @@ Learners can:
 ├── netlify/
 │   └── functions/
 │       ├── agent-chat.js
+│       ├── coordinator-chat.js
 │       ├── deepseek.js
 │       ├── section-chat.js
 │       └── lib/
@@ -363,6 +424,9 @@ API routes are mapped through `netlify.toml`:
 /api/agent-chat
 → /.netlify/functions/agent-chat
 
+/api/coordinator-chat
+→ /.netlify/functions/coordinator-chat
+
 /api/section-chat
 → /.netlify/functions/section-chat
 ```
@@ -390,7 +454,3 @@ Future development may include:
 - semantic/vector retrieval for course resources;
 - more robust learning analytics;
 - teacher-facing analytics dashboards.
-
-## Author
-
-**Yang Tongshu**
